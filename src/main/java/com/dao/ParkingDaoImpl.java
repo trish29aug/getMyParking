@@ -53,16 +53,17 @@ public class ParkingDaoImpl implements ParkingDao {
 	    
 	    //checking if the vehicle is already Checked In but not Checked Out yet
 	    try{
-	    String SQL_QUERY ="from ParkingDetails where vehNo=?";
+	    String SQL_QUERY ="from ParkingDetails where vehNo=? and outTime=NULL";
 		Query query = session.createQuery(SQL_QUERY);
 		query.setParameter(0,bean.getVehNo());
+		
 		List list = query.list();
 		if(list!=null && list.size()>0)
 		{
-		if(((ParkingDetails) list.get(0)).getOutTime()==null){
+			bean.setId(((ParkingDetails) list.get(0)).getId());
 			bean.setErrorFlag(true);
 			bean.setMsg("Already Checked In");
-			}
+			
 		}
 		if(!bean.getErrorFlag()){
 	    

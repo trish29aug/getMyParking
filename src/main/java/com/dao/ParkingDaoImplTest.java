@@ -4,14 +4,9 @@
 package com.dao;
 
 import java.sql.Timestamp;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
+
 import java.util.Date;
 
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
-import static org.hamcrest.CoreMatchers.containsString;
 import junit.framework.TestCase;
 
 /**
@@ -20,8 +15,6 @@ import junit.framework.TestCase;
  */
 public class ParkingDaoImplTest extends TestCase {
 
-	@Rule
-    public ExpectedException thrown = ExpectedException.none();
 	/**
 	 * Test method for {@link com.dao.ParkingDaoImpl#checkin(com.bean.ParkingBean)}.
 	 */
@@ -152,7 +145,6 @@ public class ParkingDaoImplTest extends TestCase {
 			float costShouldBe=640;
 			
 			Float cost=dao.costCalculationApi(new Timestamp(in.getTime()),new Timestamp(out.getTime()), lot);
-			System.out.println(cost);
 			assertTrue(cost==costShouldBe);
 			
 	}

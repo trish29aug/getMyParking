@@ -64,6 +64,8 @@ public class ParkingController {
 		else{
 			map.put("Error",Boolean.toString(bean.getErrorFlag()));
 			map.put("Msg",bean.getMsg());
+			if(bean.getId()!=null)
+				map.put("TokenId", bean.getId().toString());
 		}
 		
 		//response json object
