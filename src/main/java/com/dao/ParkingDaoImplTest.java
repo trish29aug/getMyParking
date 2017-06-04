@@ -4,8 +4,11 @@
 package com.dao;
 
 import java.sql.Timestamp;
-
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+
+import com.bean.ParkingBean;
 
 import junit.framework.TestCase;
 
@@ -15,20 +18,7 @@ import junit.framework.TestCase;
  */
 public class ParkingDaoImplTest extends TestCase {
 
-	/**
-	 * Test method for {@link com.dao.ParkingDaoImpl#checkin(com.bean.ParkingBean)}.
-	 */
-	public void testCheckin() {
-		//fail("Not yet implemented");
-	}
-
-	/**
-	 * Test method for {@link com.dao.ParkingDaoImpl#checkout(com.bean.ParkingBean)}.
-	 */
-	public void testCheckout() {
-		//fail("Not yet implemented");
-	}
-
+	
 	/**
 	 * Test method for {@link com.dao.ParkingDaoImpl#costCalculationApi(java.util.Date, java.util.Date, int)}.
 	 * This test case tests the basic parking session Cost
@@ -36,16 +26,21 @@ public class ParkingDaoImplTest extends TestCase {
 	@SuppressWarnings("deprecation")
 	public void testCostCalculationApiBasic() {
 		
-		
+		try{
 			ParkingDaoImpl dao=new ParkingDaoImpl();
 			int lot=0;
-			Date in=new Date(117, 6, 1, 10, 30,0);
-			Date out=new Date(117, 6, 1, 18, 30,0);
+			//Date in=new Date(117, 6, 1, 10, 30,0);
+			Date in  = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").parse("2017-06-01 10:30:00");
+			
+			Date out=new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").parse("2017-06-01 18:30:00");
 			float costShouldBe=160;
 			
 			Float cost=dao.costCalculationApi(new Timestamp(in.getTime()),new Timestamp(out.getTime()), lot);
 			
 			assertTrue(cost==costShouldBe);
+		}catch(Exception e){
+			e.printStackTrace();
+		}
 			
 	}
 	
@@ -59,14 +54,21 @@ public class ParkingDaoImplTest extends TestCase {
 		
 			ParkingDaoImpl dao=new ParkingDaoImpl();
 			int lot=1;
-			Date in=new Date(117, 6, 1, 10, 30,0);
-			Date out=new Date(117, 6, 1, 18, 30,0);
-			float costShouldBe=40;
+			try {
+				Date in = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").parse("2017-06-01 10:30:00");
+				Date out=new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").parse("2017-06-01 18:30:00");
+				float costShouldBe=40;
+				
+				Float cost=dao.costCalculationApi(new Timestamp(in.getTime()),new Timestamp(out.getTime()), lot);
+				
+				
+				assertTrue(cost==costShouldBe);
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			
-			Float cost=dao.costCalculationApi(new Timestamp(in.getTime()),new Timestamp(out.getTime()), lot);
 			
-			
-			assertTrue(cost==costShouldBe);
 			
 	}
 	/*
@@ -75,18 +77,21 @@ public class ParkingDaoImplTest extends TestCase {
 	*/
 	@SuppressWarnings("deprecation")
 	public void testCostCalculationApiScenario2(){
-		
+		try{
 			ParkingDaoImpl dao=new ParkingDaoImpl();
 			int lot=2;
-			Date in=new Date(117, 6, 1, 10, 30,0);
-			Date out=new Date(117, 6, 1, 18, 30,0);
+			Date in=new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").parse("2017-06-01 10:30:00");;
+			Date out=new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").parse("2017-06-01 18:30:00");;
 			float costShouldBe=45;
 			
 			Float cost=dao.costCalculationApi(new Timestamp(in.getTime()),new Timestamp(out.getTime()), lot);
 			
 			
 			assertTrue(cost==costShouldBe);
-			
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	/*
@@ -96,17 +101,20 @@ public class ParkingDaoImplTest extends TestCase {
 	@SuppressWarnings("deprecation")
 	public void testCostCalculationApiScenarioNight1(){
 		
-		
+		try{
 			ParkingDaoImpl dao=new ParkingDaoImpl();
 			int lot=0;
-			Date in=new Date(117, 6, 1, 22, 30,0);
-			Date out=new Date(117, 6, 1, 23, 30,0);
+			Date in=new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").parse("2017-06-01 22:30:00");
+			Date out=new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").parse("2017-06-01 23:30:00");;
 			float costShouldBe=40;
 			
 			Float cost=dao.costCalculationApi(new Timestamp(in.getTime()),new Timestamp(out.getTime()), lot);
 		
 			assertTrue(cost==costShouldBe);
-			
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 			
 	}
 	
@@ -117,17 +125,20 @@ public class ParkingDaoImplTest extends TestCase {
 	@SuppressWarnings("deprecation")
 	public void testCostCalculationApiScenarioNight2(){
 		
-		
+		try{
 			ParkingDaoImpl dao=new ParkingDaoImpl();
 			int lot=0;
-			Date in=new Date(117, 6, 1, 22, 30,0);
-			Date out=new Date(117, 6, 2, 4, 30,0);
+			Date in=new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").parse("2017-06-01 22:30:00");
+			Date out=new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").parse("2017-06-02 04:30:00");
 			float costShouldBe=140;
 			
 			Float cost=dao.costCalculationApi(new Timestamp(in.getTime()),new Timestamp(out.getTime()), lot);
 			
 			assertTrue(cost==costShouldBe);
-			
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	/*
@@ -137,34 +148,20 @@ public class ParkingDaoImplTest extends TestCase {
 	@SuppressWarnings("deprecation")
 	public void testCostCalculationApiScenarioNight3(){
 		
-		
+		try{
 			ParkingDaoImpl dao=new ParkingDaoImpl();
 			int lot=0;
-			Date in=new Date(117, 6, 1, 22, 30,0);
-			Date out=new Date(117, 6, 3, 4, 30,0);
+			Date in=new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").parse("2017-06-01 22:30:00");
+			Date out=new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").parse("2017-06-03 04:30:00");
 			float costShouldBe=640;
 			
 			Float cost=dao.costCalculationApi(new Timestamp(in.getTime()),new Timestamp(out.getTime()), lot);
 			assertTrue(cost==costShouldBe);
-			
+	} catch (ParseException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
 	}
-	
-	
-	
-	/*
-	 * This test case tests the if invalid lot number is entered
-	*/
-	@SuppressWarnings("deprecation")
-	public void testCostCalculationApiInvalidLot() {
-		
-			ParkingDaoImpl dao=new ParkingDaoImpl();
-			int lot=4;
-			Date in=new Date(117, 6, 1, 22, 30,0);
-			Date out=new Date(117, 6, 2, 4, 30,0);
-			Float cost=dao.costCalculationApi(new Timestamp(in.getTime()),new Timestamp(out.getTime()), lot);
-			assertTrue(cost==0);
-			
-			
 	}
+
 
 }

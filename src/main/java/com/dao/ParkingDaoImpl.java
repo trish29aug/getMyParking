@@ -230,9 +230,8 @@ public class ParkingDaoImpl implements ParkingDao {
 		        int inTime = Integer.parseInt(new SimpleDateFormat("HH").format(checkInDateTime).toString());
 		        int outTime = Integer.parseInt(new SimpleDateFormat("HH").format(checkOutDateTime).toString());
 		        
-		        
 		        Date inDate=new SimpleDateFormat("yyyy-MM-dd").parse(checkInDateTime.toString());
-		        Date outDate=new SimpleDateFormat("yyyy-MM-dd").parse(checkOutDateTime.toString());
+		        Date outDate=new SimpleDateFormat("yyyy-M-dd").parse(checkOutDateTime.toString());
 		        
 		        //Check In time and Out time is on the same day
 			        if(inDate.equals(outDate)){

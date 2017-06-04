@@ -29,8 +29,12 @@ public class ParkingServiceImpl implements ParkingService{
 
 
 	// Checking Out the vehicle by calling the function of parking Dao
-	public void checkout(ParkingBean bean){
+	public void checkoutByTokenId(ParkingBean bean){
 		dao.checkout(bean);
+	}
+	
+	public void checkoutManually(ParkingBean bean){
+		bean.setCharges(dao.costCalculationApi(bean.getInTime(), bean.getOutTime(), bean.getParkingType()));
 	}
 
 }
