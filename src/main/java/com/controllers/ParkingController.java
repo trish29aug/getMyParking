@@ -119,14 +119,15 @@ public class ParkingController {
 	@RequestMapping(value = "/costCalculationAPI",method = RequestMethod.POST,headers = {"Accept=application/json"}, consumes="application/json", produces = "application/json")
 	public @ResponseBody JSONObject costCalculationAPI(@RequestBody JSONObject request){
 
-		bean.setVehNo(request.get("VehNo").toString());
+		
 		bean.setParkingType(Integer.parseInt(request.get("LotNo").toString()));
 		bean.setErrorFlag(false);
 		try {
 			bean.setInTime(new Timestamp(new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").parse(request.get("inTime").toString()).getTime()));
 			bean.setOutTime(new Timestamp(new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").parse(request.get("outTime").toString()).getTime()));
 		} catch (ParseException e) {
-			e.printStackTrace();
+			bean.setErrorFlag(true);
+			bean.setMsg("Invalid Date format");
 		}
 		
 		//calling function of parking service to checkout
@@ -137,7 +138,8 @@ public class ParkingController {
 		
 		//Check if the checkout process had any error
 		if (!bean.getErrorFlag()){
-		map.put("VehNo",bean.getVehNo());
+			bean.setMsg("Success");
+		
 		map.put("InTime",bean.getInTime().toString());
 		map.put("OutTime",bean.getOutTime().toString());
 		map.put("Total Charge",Float.toString(bean.getCharges()));

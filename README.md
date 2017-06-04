@@ -2,11 +2,21 @@
 
 This project is a back-end assignment as a part of the recruitment process for getmyparking.com
 
-It is a parking lot management system handling basic parking sessions, where a vehicle checkin’s and checkouts are being tracked by the system with different scenarios of parking lots, these scenarios are explained in later sections  
+It is a parking lot management system handling basic parking sessions, where a vehicle's check-in and check-out is being tracked by the system with different scenarios of parking lots, these scenarios are explained in later sections  
 
 ## Getting Started
 
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. 
+These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. Read the project conceptualization below carefully before proceeding with the setup:
+
+
+**Project concept Details**:
+This project is divided in two parts. The first one is a static cost calculation API which takes in check-in time, check-out time and parking type as input and calculates the cost as per the type, i.e. the given scenarios in the problem statement.
+
+The second part is a dynamic approach which needs connection to the database (Read the details below for configuring the database connection). This part has two APIs in place namely check-in and check-out.
+In the check-in API the operator has to provide only the vehicle details, for record keeping purpose, and the parking lot type. The API will insert the vehicle and lot details along with the current timestamp as in time of the vehicle. It will generate the parking ticket ID and send it as a response along with other flags/parameters.
+In the check-out API, the operator needs to simply provide the ticketId as an input. The system will fetch vehicle/lot details and according to the lot type, i.e. the scenario it will calculate the total cost that the vehicle owner has to bear. 
+
+**Note that the night charges will be calculated, if applicable, in all the cases**
 
 ### Prerequisites
 
@@ -18,78 +28,107 @@ Following are the tools and software needed to setup the project:
 1. Database Server: Oracle, MySQL or any other DBMS of your preference is needed to establish a connection to handle data storage and management
 1. Git client like git bash or other GUI based client like TortoiseGIT to clone the project from the github repository
 
-```
-Give examples
-```
 
 ### Installing
 
-A step by step series of examples that tell you have to get a development env running
+1. Use Git to make a clone of the project in your system.
+1. Unzip the apache-tomcat-8.0.43.zip, which can be found in the project cloned from Git.
+1. Open eclipse with a new workspace
+1. Go to File -> Import -> General -> Existing Project Into Workspace
+1. Next we need to attach a local server to deploy this project. If you are using Eclipse, follow the steps below, otherwise follow the similar steps in your respective IDE:
 
-Say what the step will be
+* Click on Window menu -> Show View -> Servers
+* Right Click on Servers Tab and then click on 'New' -> Server. 
+* Under Apache select Tomcatv8.0 Server, then click next
+* Click on browse next to the Tomcat installation Directory and give the path of the root directory of the unzipped apache-tomcat-8.0.43 folder and click finish and finish creating the New Server.
+
+After adding the Server, we shall start the server:
+1. Clean and Build both the projects in the workspace,then Right Click on Server instance created in the server tab and Click on start.
+1. This step is optional.If you also want to use the Dynamic Part of the project (i.e Checking In at run time and Checking out later), you will need to provide a connection to the database. For this you will need to first setup a database server on your machine , create a user in it and then do the following on Eclipse or similar IDE:
+
+* To add a Connection Driver Jar, right click on Servers (project created next to myParking) . Click on run -> run configurations, double click on Apache Tomcat present in the menu, Click on classpath and then on UserEntries Click On Add JAR, add the ojdbc14 or mysql-connector jar depending on your choice of Database present in /myParking/src/main/resources folder.
+* Update the /myParking/src/main/resources/hibernate.cfg.xml with your database's connection parameters and driver's classname etc.
+
+
+
+### Running the Project
+
+**Running Through IDE/browser:**
+
+1. Right click on myParking Project, click on Run as -> Run on Server
+1. Enter the details: Vehicle number, Check in Time, Check out time, and Parking Lot type. Date time should be in this format "yyyy-MM-dd hh:mm:ss" and parking lot can be 0,1 and 2.
+
+* Type 0: Basic type where rate is flat Rs 20 per hour for the duration of the parking session. 
+
+* Type 1: Flat rate for first x hours, then incremental Rs y for every z hours. a. Example Rs 10 for first 2 hours then Rs 5 every hour.
+
+* Type 2: Flat rate for x hours repetitively, then incremental Rs y for every z hours. a. Example Rs 20 for first 2 hours then Rs 10 for next 3 hours, then Rs 5 every hour.
+ 
+* Night Charges:Special Night charges in addition to the fixed prices described above. This will be a flat rate for a given time period. The time period can extend between dates. Example 10 pm to 5 am. 
+
+*-Note that the night charges will be calculated, if applicable, in all the cases*
+
+**Running Through PostMan, or any other client as a REST API:**
+
+1. Add the project to the server and Restart the server
+2. Use the following End Points:
+
+* Url: http://localhost:8080/myParking/costCalculationAPI
+* Body -> raw -> JSON(application/json): Give the input JSON object in Key-Value Pair form
+
+For the Cost Calculation API:
+1. URL:http://localhost:8080/myParking/costCalculationAPI
+2. Json Inputs:
+
+* LotNo 
+* inTime
+* outTime
+
+Example:
 
 ```
-Give the example
+{
+"LotNo": "0", 
+"inTime": "2017-06-01 10:30:00",
+"outTime": "2017-06-02 10:30:00"
+}
 ```
 
-And repeat
+For the Dynamic approach Check In:
+1. URL:http://localhost:8080/myParking/costCalculationAPI
+2. Json Inputs:
+
+* VehNo 
+* LotNo
 
 ```
-until finished
+{
+"VehNo": "DL-9C KT 1213",
+"LotNo": "0"
+}
 ```
 
-End with an example of getting some data out of the system or using it for a little demo
+For the Dynamic approach Check Out:
+
+After check In
+1. URL:http://localhost:8080/myParking/costCalculationAPI
+2. Json Inputs:
+
+* tokenId 
+
+```
+{
+"tokenId": "145"
+}
+```
+
+
 
 ## Running the tests
 
-Explain how to run the automated tests for this system
+Tests are written in */myParking/src/main/java/com/dao/ParkingDaoImplTest.java* File.
+Right click on the file and Run as Junit Tests.
 
-### Break down into end to end tests
 
-Explain what these tests test and why
 
-```
-Give an example
-```
 
-### And coding style tests
-
-Explain what these tests test and why
-
-```
-Give an example
-```
-
-## Deployment
-
-Add additional notes about how to deploy this on a live system
-
-## Built With
-
-* [Dropwizard](http://www.dropwizard.io/1.0.2/docs/) - The web framework used
-* [Maven](https://maven.apache.org/) - Dependency Management
-* [ROME](https://rometools.github.io/rome/) - Used to generate RSS Feeds
-
-## Contributing
-
-Please read [CONTRIBUTING.md](https://gist.github.com/PurpleBooth/b24679402957c63ec426) for details on our code of conduct, and the process for submitting pull requests to us.
-
-## Versioning
-
-We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/your/project/tags). 
-
-## Authors
-
-* **Billie Thompson** - *Initial work* - [PurpleBooth](https://github.com/PurpleBooth)
-
-See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
-
-## Acknowledgments
-
-* Hat tip to anyone who's code was used
-* Inspiration
-* etc

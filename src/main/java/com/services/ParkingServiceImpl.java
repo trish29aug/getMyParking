@@ -35,6 +35,10 @@ public class ParkingServiceImpl implements ParkingService{
 	
 	public void checkoutManually(ParkingBean bean){
 		bean.setCharges(dao.costCalculationApi(bean.getInTime(), bean.getOutTime(), bean.getParkingType()));
+		if(bean.getCharges()==-1){
+			bean.setErrorFlag(true);
+			bean.setMsg("Check In Time is more than Out Time");
+		}
 	}
 
 }

@@ -261,7 +261,9 @@ public class ParkingDaoImpl implements ParkingDao {
 			        		}
 				}
         	}
-		   
+        else{
+        	cost=-1;
+        }
 		}catch(Exception e){
 			e.printStackTrace();
 		}
