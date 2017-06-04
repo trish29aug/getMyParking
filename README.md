@@ -127,6 +127,7 @@ After check In
 ## Running the tests
 
 Tests are written in */myParking/src/main/java/com/dao/ParkingDaoImplTest.java* File.
+
 Right click on the file and Run as Junit Tests.
 
 
